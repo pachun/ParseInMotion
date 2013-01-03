@@ -33,16 +33,69 @@ class Player < PMUser
   fields :username, :password, :wins, :losses
 end
 ```
-
-|Parse Motion|Objective-C|
-|-|-|
-|player = Player.new     |PFUser *player = PFUser.user                 |
-|player.wins = 5         |[player setObject:5, forKey:'wins']      |
-|player.wins             |[player objectForKey:'wins']             |
-|user.signup             |[player signUpInBackgroundWithBlock^(BOOL succeeded, NSError *error) { }]|
-|Player.login(player)    | [PFUser logInWithUsernameInBackground:@"username", password:@"password"], block:^(PFUser *user, NSError *error) { }]|
-|Player.current|[PFUser currentUser]|
-|Player.logout|[PFUser logOut]|
+<table>
+  <tr>
+    <td><strong>Parse Motion</td>
+    <td><strong>Objective-C</td>
+  </tr>
+  <tr>
+    <td>
+      player = Player.new
+    </td>
+    <td>
+      PFUser *player = PFUser.user
+    </td>
+  </tr>
+  <tr>
+    <td>
+      player.wins = 5
+    </td>
+    <td>
+      [player setObject:5, forKey:'wins']
+    </td>
+  </tr>
+  <tr>
+    <td>
+      player.wins
+    </td>
+    <td>
+      [player objectForKey:'wins']
+    </td>
+  </tr>
+  <tr>
+    <td>
+      player.signup
+    </td>
+    <td>
+      [player signUpInBackgroundWithBlock^(BOOL succeeded, NSError *error) { }]
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Player.login(player)
+    </td>
+    <td>
+      [PFUser logInWithUsernameInBackground:@"username", password:@"password"], block:^(PFUser *user, NSError *error) { }]
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Player.current
+    </td>
+    <td>
+      [PFUser currentUser]
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Player.logout
+    </td>
+    <td>
+      [PFUser logOut]
+    </td>
+  </tr>
+  <tr>
+</table>
 
 ## Handling Logins & Signups
 ---
