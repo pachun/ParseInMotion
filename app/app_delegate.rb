@@ -4,6 +4,10 @@ class AppDelegate
     Parse.setApplicationId('5IOtGbU8fc9FmPX3jmrieNviZxnNgiNN0qercWEs', clientKey:'GgXHoPidP2ZXLeuIhxHgtRB04lxH3Vgr8lJaVDN1')
     # application.registerForRemoteNotificationTypes(UIRemoteNotificationTypeBadge)
 
+    @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
+    @window.rootViewController = TestVC.new
+    @window.makeKeyAndVisible
+
     true
   end
 

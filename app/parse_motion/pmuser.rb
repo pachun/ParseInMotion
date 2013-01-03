@@ -8,29 +8,23 @@ class PMUser < PFUser
   #
   # The fields username, password, & email are defined
   #   for you implicitly, but you can define them yourself
-  #   for clarity as well.
-  #
-  # You /have to/ define the field for it's getter to work!!
+  #   in the model definition for clarity as well.
   #
   # Example:
   #   class User < PMUser
   #     fields :username, :password, :full_name
   #   end
 
-  # notes: need a special place for password; Parse doesn't ever let you retrieve it
-  attr_accessor :passwrd
+  attr_accessor :fields
 
   def self.fields(*fields)
+    @fields = []
     fields.each do |f|
-      if f != :password
+      f = f.to_sym
+      @fields << f
+      if f != :username && f != :email && f != :password
         define_method(f.to_s) { self[f] }
         define_method(f.to_s + '=') { |val| self[f] = val }
-      else
-        define_method(f.to_s) { @passwrd }
-        define_method(f.to_s + '=') do |val|
-          self[f] = val
-          @passwrd = val
-        end
       end
     end
   end
@@ -44,7 +38,7 @@ class PMUser < PFUser
 
   attr_accessor :delegate
   attr_accessor :signup_success_method, :signup_failure_method
-  attr_accessor :login_success_method, :login_failed_method
+  attr_accessor :login_success_method, :login_failure_method
 
   def when(event, call:method)
     method = method.to_sym
@@ -60,48 +54,49 @@ class PMUser < PFUser
     else
       puts "\"#{event}\" is not an understood event."
     end
-    # if event == :signup_succeeds
-    #   @signup_success_method = method
-    # elsif event == :signup_fails
-    #   @signup_failure_method = method
-    # elsif event == :login_succeeds
-    #   @login_success_method = method
-    # elsif event == :login_fails
-    #   @login_failure_method = method
-    # end
   end
 
   def signup
     signUpInBackgroundWithBlock(lambda do |succeeded, error|
       if(!error)
-        @delegate.send(:signup_success_method)
+        @delegate.send(@signup_success_method)
       else
-        @delegate.send(:signup_error_method, error.userInfo[:error])
+        @delegate.send(@signup_failure_method, error.userInfo[:error])
       end
     end)
   end
 
-  def login
-    if valid_credentials?
-      self.logInWithUsernameInBackground(username, password:@passwrd,
-        lambda do |user, error|
-          @delegate.send
-        end)
+  def self.login(user)
+    if user.valid_credentials?
+      PFUser.logInWithUsernameInBackground(user.username, password:user.password, block:lambda do |authed_user, error|
+        if (authed_user)
+          # puts "all methods: #{user.class.instance_methods(false)}"
+          # add instance methods to authed_user here
+          user.delegate.send(user.login_success_method, authed_user)
+        else
+          user.delegate.send(user.login_failure_method, error.userInfo[:error])
+        end
+      end)
     end
   end
 
   def valid_credentials?
     valid = false
-
     if username.class != String || username.length <= 0
       print "\t => You need a (string) username to signup & login."
-    elsif @passwrd.class != String || @passwrd.length <= 0
+    elsif password.class != String || password.length <= 0
       print "\t => You need a (string) password to signup & login."
     else
       valid = true
     end
-
     valid
   end
 
+  def self.logout
+    PFUser.logOut
+  end
+
+  def self.current
+    PFUser.currentUser
+  end
 end

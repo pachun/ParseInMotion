@@ -61,7 +61,7 @@ describe 'The Parse Motion User Class' do
       end
       user = User.new
       user.email = 'hello@nickpachulski.com'
-      user.email.should == user[:email] && user[:email].should.not == nil
+      user.email.should == 'hello@nickpachulski.com'
     end
 
     it 'shouldn\'t error when the user defines a username field' do
@@ -70,7 +70,7 @@ describe 'The Parse Motion User Class' do
       end
       user = User.new
       user.username = 'pachun'
-      user.username.should == user[:username] && user[:username].should.not == nil
+      user.username.should == 'pachun'
     end
 
     it 'shouldn\'t error when the user defines a password field' do
@@ -79,7 +79,7 @@ describe 'The Parse Motion User Class' do
       end
       user = User.new
       user.password = 'password1234'
-      user.password.should == user[:password] && user[:password].should.not == nil
+      user.password.should == 'password1234'
     end
   end
 end
