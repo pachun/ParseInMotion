@@ -40,7 +40,9 @@ end
   </tr>
   <tr>
     <td>
+      ```ruby
       player = Player.new
+      ```
     </td>
     <td>
       PFUser *player = PFUser.user
