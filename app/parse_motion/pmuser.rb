@@ -40,7 +40,7 @@ class PMUser < PFUser
   attr_accessor :signup_success_method, :signup_failure_method
   attr_accessor :login_success_method, :login_failure_method
 
-  def when(event, call:method)
+  def when(event, method)
     method = method.to_sym
     case(event)
     when :signup_succeeds

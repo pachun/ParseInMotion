@@ -5,10 +5,10 @@ class TestVC < UIViewController
     user = XUser.new
 
     user.delegate = self
-    user.when :signup_succeeds, call: 'signed_up'
-    user.when :signup_fails, call: 'signup_failed:'
-    user.when :login_succeeds, call: 'logged_in:'
-    user.when :login_fails, call: 'login_failed:'
+    user.when :signup_succeeds, 'signed_up'
+    user.when :signup_fails, 'signup_failed:'
+    user.when :login_succeeds, 'logged_in:'
+    user.when :login_fails, 'login_failed:'
 
     user.username = 'pachun'
     user.password = 'password'
